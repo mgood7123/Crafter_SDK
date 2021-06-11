@@ -1,0 +1,9 @@
+[submodule "Crafter_Magnum/corrade"]
+	path = Crafter_Magnum/corrade
+	url = https://github.com/mgood7123/corrade
+[submodule "Crafter_Magnum/magnum"]
+	path = Crafter_Magnum/magnum
+	url = https://github.com/mgood7123/magnum
+[submodule "Crafter_Magnum/toolchains"]
+	path = Crafter_Magnum/toolchains
+	url = https://github.com/mosra/toolchains
