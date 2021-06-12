@@ -64,10 +64,7 @@ void Crafter::Packages::Cube::viewportEvent(ViewportEvent &event) {
 }
 
 void Crafter::Packages::Cube::mousePressEvent(MouseEvent& event) {
-    // button identification is not yet handled on android
-#ifndef CORRADE_TARGET_ANDROID
     if(event.button() != MouseEvent::Button::Left) return;
-#endif
     event.setAccepted();
 }
 
@@ -79,10 +76,7 @@ void Crafter::Packages::Cube::mouseReleaseEvent(MouseEvent& event) {
 }
 
 void Crafter::Packages::Cube::mouseMoveEvent(MouseMoveEvent& event) {
-    // button identification is not yet handled on android
-#ifndef CORRADE_TARGET_ANDROID
     if(!(event.buttons() & MouseMoveEvent::Button::Left)) return;
-#endif
 
     Vector2 delta = 3.0f*Vector2{event.relativePosition()}/Vector2{windowSize()};
     _transformation =
