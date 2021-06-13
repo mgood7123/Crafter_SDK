@@ -78,7 +78,7 @@ void Crafter::Packages::CubeWithCamera::mouseMoveEvent(MouseMoveEvent& event) {
 
     Vector2 delta = 3.0f*Vector2{event.relativePosition()}/Vector2{windowSize()};
 
-    // move camera up, down, left, right
+    // rotate camera up, down, left, right
     camera.addRotationY(delta.x()*100);
     camera.addRotationX(-(delta.y()*100));
     camera.updateCamera();
