@@ -5,7 +5,7 @@
 #ifndef CRAFTER_TRIANGLE_H
 #define CRAFTER_TRIANGLE_H
 #include <Magnum/GL/Mesh.h>
-#include <Magnum/Shaders/VertexColor.h>
+#include <Magnum/Shaders/VertexColorGL.h>
 
 namespace Crafter {
     namespace Packages {

@@ -19,5 +19,6 @@
 #include "../packages/cube.h"
 #include "../packages/egl_cube.h"
 #include "../packages/polygonBlueprint.h"
+#include "../packages/cubeWithCamera.h"
 
 #endif //CRAFTER_PACKAGEDEMOS_H

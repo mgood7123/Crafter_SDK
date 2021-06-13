@@ -24,8 +24,8 @@ void Crafter::Packages::Triangle::setup() {
 
     _mesh.setCount(3)
             .addVertexBuffer(std::move(buffer), 0,
-                             Shaders::VertexColor2D::Position{},
-                             Shaders::VertexColor2D::Color3{});
+                             Shaders::VertexColorGL2D::Position{},
+                             Shaders::VertexColorGL2D::Color3{});
 }
 
 void Crafter::Packages::Triangle::drawEvent() {
