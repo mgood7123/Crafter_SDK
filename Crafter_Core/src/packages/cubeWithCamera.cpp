@@ -32,13 +32,10 @@ void Crafter::Packages::CubeWithCamera::setup() {
                              Shaders::PhongGL::Normal{})
             .setIndexBuffer(std::move(indices), 0, compressed.second);
 
-    camera.setRotationX(30.0_degf);
-    camera.setRotationY(40.0_degf);
-    camera.updateTransformation();
-    camera.setTranslationZ(-10.0f);
-    camera.updateTranslation();
     camera.setPerspectiveProjection(35.0_degf, Vector2{windowSize()}.aspectRatio(), 0.01f, 100.0f);
-    camera.combinePerspectiveProjectionWithTranslation();
+    camera.setRotation(30.0f, 40.0f, 0.0f);
+    camera.setTranslation(0.0f, 0.0f, -10.0f);
+    camera.updateCamera();
 
     _color = Color3::fromHsv({35.0_degf, 1.0f, 1.0f});
 }
@@ -47,15 +44,11 @@ void Crafter::Packages::CubeWithCamera::drawEvent() {
     GL::defaultFramebuffer.clear(
             GL::FramebufferClear::Color|GL::FramebufferClear::Depth);
 
-    Debug{} << "translationY: " << camera._translationY;
-    Debug{} << "translation: " << camera._projection.translation();
-
     _shader.setLightPositions({{1.4f, 1.0f, 0.75f, 0.0f}})
             .setDiffuseColor(_color)
             .setAmbientColor(Color3::fromHsv({_color.hue(), 1.0f, 0.3f}))
-            .setTransformationMatrix(camera._transformation)
-            .setNormalMatrix(camera._transformation.normalMatrix())
-            .setProjectionMatrix(camera._projection)
+            .setTransformationMatrix(camera.rotation())
+            .setProjectionMatrix(camera.modelView())
             .draw(_mesh);
 
     swapBuffers();
@@ -65,7 +58,7 @@ void Crafter::Packages::CubeWithCamera::viewportEvent(ViewportEvent &event) {
     GL::defaultFramebuffer.setViewport({{}, event.framebufferSize()});
 
     camera.setPerspectiveProjection(35.0_degf, Vector2{GL::defaultFramebuffer.viewport().size()}.aspectRatio(), 0.01f, 100.0f);
-    camera.combinePerspectiveProjectionWithTranslation();
+    camera.updateCamera();
 }
 
 void Crafter::Packages::CubeWithCamera::mousePressEvent(MouseEvent& event) {
@@ -84,11 +77,10 @@ void Crafter::Packages::CubeWithCamera::mouseMoveEvent(MouseMoveEvent& event) {
     if(!(event.buttons() & MouseMoveEvent::Button::Left)) return;
 
     Vector2 delta = 3.0f*Vector2{event.relativePosition()}/Vector2{windowSize()};
-    Debug{} << delta.y();
 
     // move camera up and down
-    camera.setTranslationY(-delta.y());
-    camera.combineProjectionWithTranslationY();
+    camera.addTranslation(0.0f, -delta.y(), 0.0f);
+    camera.updateCamera();
 
     event.setAccepted();
     redraw();

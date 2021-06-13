@@ -32,8 +32,7 @@ void Crafter::Packages::Cube::setup() {
                              Shaders::PhongGL::Normal{})
             .setIndexBuffer(std::move(indices), 0, compressed.second);
 
-    _transformation =
-            Matrix4::rotationX(30.0_degf)*Matrix4::rotationY(40.0_degf);
+    _transformation = Matrix4::rotationX(30.0_degf)*Matrix4::rotationY(40.0_degf);
     _projection =
             Matrix4::perspectiveProjection(
                     35.0_degf, Vector2{windowSize()}.aspectRatio(), 0.01f, 100.0f)*
