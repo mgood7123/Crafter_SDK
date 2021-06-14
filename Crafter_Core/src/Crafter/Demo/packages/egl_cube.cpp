@@ -2,10 +2,10 @@
 // Created by Matthew Good on 10/6/21.
 //
 
-CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Packages::EGL_Cube, EGL_Cube)
+CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Demo::Packages::EGL_Cube, EGL_Cube)
 
 void
-Crafter::Packages::EGL_Cube::multMatrix(glMatrix *result, glMatrix *srcA, glMatrix *srcB) {
+Crafter::Demo::Packages::EGL_Cube::multMatrix(glMatrix *result, glMatrix *srcA, glMatrix *srcB) {
     glMatrix    tmp;
     int         i;
 
@@ -34,7 +34,7 @@ Crafter::Packages::EGL_Cube::multMatrix(glMatrix *result, glMatrix *srcA, glMatr
     memcpy(result, &tmp, sizeof(glMatrix));
 }
 
-void Crafter::Packages::EGL_Cube::loadIdentity(glMatrix *result) {
+void Crafter::Demo::Packages::EGL_Cube::loadIdentity(glMatrix *result) {
     memset(result, 0x0, sizeof(glMatrix));
     result->mat[0][0] = 1.0f;
     result->mat[1][1] = 1.0f;
@@ -42,7 +42,7 @@ void Crafter::Packages::EGL_Cube::loadIdentity(glMatrix *result) {
     result->mat[3][3] = 1.0f;
 }
 
-void Crafter::Packages::EGL_Cube::scaleMatrix(glMatrix *result, GLfloat sx, GLfloat sy, GLfloat sz) {
+void Crafter::Demo::Packages::EGL_Cube::scaleMatrix(glMatrix *result, GLfloat sx, GLfloat sy, GLfloat sz) {
     result->mat[0][0] *= sx;
     result->mat[0][1] *= sx;
     result->mat[0][2] *= sx;
@@ -60,7 +60,7 @@ void Crafter::Packages::EGL_Cube::scaleMatrix(glMatrix *result, GLfloat sx, GLfl
 }
 
 void
-Crafter::Packages::EGL_Cube::rotationMatrix(glMatrix *result, GLfloat angle, GLfloat x, GLfloat y, GLfloat z) {
+Crafter::Demo::Packages::EGL_Cube::rotationMatrix(glMatrix *result, GLfloat angle, GLfloat x, GLfloat y, GLfloat z) {
     GLfloat sinAngle, cosAngle;
     GLfloat mag = sqrtf(x * x + y * y + z * z);
 
@@ -111,7 +111,7 @@ Crafter::Packages::EGL_Cube::rotationMatrix(glMatrix *result, GLfloat angle, GLf
     }
 }
 
-void Crafter::Packages::EGL_Cube::frustumMatrix(glMatrix *result, float left, float right, float bottom,
+void Crafter::Demo::Packages::EGL_Cube::frustumMatrix(glMatrix *result, float left, float right, float bottom,
                                                 float top, float nearZ, float farZ) {
     float       deltaX = right - left;
     float       deltaY = top - bottom;
@@ -139,7 +139,7 @@ void Crafter::Packages::EGL_Cube::frustumMatrix(glMatrix *result, float left, fl
     multMatrix(result, &frust, result);
 }
 
-bool Crafter::Packages::EGL_Cube::initialize() {
+bool Crafter::Demo::Packages::EGL_Cube::initialize() {
     glClearDepthf(1.0f);
     glClearColor(0.0f,0.0f,0.0f,1.0f);
 
@@ -263,7 +263,7 @@ bool Crafter::Packages::EGL_Cube::initialize() {
     return true;
 }
 
-void Crafter::Packages::EGL_Cube::viewportEvent(ViewportEvent &e) {
+void Crafter::Demo::Packages::EGL_Cube::viewportEvent(ViewportEvent &e) {
     int surface_width = e.windowSize().x();
     int surface_height = e.windowSize().y();
     glViewport(0, 0, surface_width, surface_height);
@@ -287,7 +287,7 @@ void Crafter::Packages::EGL_Cube::viewportEvent(ViewportEvent &e) {
     }
 }
 
-void Crafter::Packages::EGL_Cube::setup() {
+void Crafter::Demo::Packages::EGL_Cube::setup() {
     isInitialized = initialize();
     if (isInitialized) {
         glUseProgram(program);
@@ -305,11 +305,11 @@ void Crafter::Packages::EGL_Cube::setup() {
     }
 }
 
-void Crafter::Packages::EGL_Cube::drawEvent() {
+void Crafter::Demo::Packages::EGL_Cube::drawEvent() {
     if (isInitialized) render();
 }
 
-void Crafter::Packages::EGL_Cube::render() {
+void Crafter::Demo::Packages::EGL_Cube::render() {
 
     //Typical render pass
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -325,7 +325,7 @@ void Crafter::Packages::EGL_Cube::render() {
     redraw();
 }
 
-Crafter::Packages::EGL_Cube::~EGL_Cube() {
+Crafter::Demo::Packages::EGL_Cube::~EGL_Cube() {
     // Disable attribute arrays
     glDisableVertexAttribArray(positionLoc);
     glDisableVertexAttribArray(colorLoc);

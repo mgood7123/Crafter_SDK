@@ -23,7 +23,7 @@ int PolygonDeformer::Blueprint::getPolygonResolution() {
 }
 
 void PolygonDeformer::Blueprint::draw() {
-    Shaders::FlatGL2D shader;
+    Shaders::FlatGL3D shader;
     shader.setColor({0.0f,0.0f,0.0f,1.0f})
         .draw(
                 MeshTools::compile(

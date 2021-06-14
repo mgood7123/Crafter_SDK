@@ -5,9 +5,9 @@
 #include <Magnum/GL/DefaultFramebuffer.h>
 #include <Magnum/GL/Buffer.h>
 
-CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Packages::Triangle, Triangle)
+CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Demo::Packages::Triangle, Triangle)
 
-void Crafter::Packages::Triangle::setup() {
+void Crafter::Demo::Packages::Triangle::setup() {
 
     struct TriangleVertex {
         Vector2 position;
@@ -28,7 +28,7 @@ void Crafter::Packages::Triangle::setup() {
                              Shaders::VertexColorGL2D::Color3{});
 }
 
-void Crafter::Packages::Triangle::drawEvent() {
+void Crafter::Demo::Packages::Triangle::drawEvent() {
     GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
 
     _shader.draw(_mesh);

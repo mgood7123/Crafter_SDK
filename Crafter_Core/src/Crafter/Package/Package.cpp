@@ -2,7 +2,7 @@
 // Created by Matthew Good on 6/6/21.
 //
 
-#include "CrafterPackage.h"
+#include "Package.h"
 
 Crafter::Package::Package(
         const Arguments &arguments

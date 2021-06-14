@@ -9,9 +9,9 @@
 #include <Magnum/Primitives/Cube.h>
 #include <Magnum/Trade/MeshData.h>
 
-CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Packages::CubeWithCamera, CubeWithCamera)
+CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Demo::Packages::Cube, Cube)
 
-void Crafter::Packages::CubeWithCamera::setup() {
+void Crafter::Demo::Packages::Cube::setup() {
     GL::Renderer::enable(GL::Renderer::Feature::DepthTest);
     GL::Renderer::enable(GL::Renderer::Feature::FaceCulling);
 
@@ -32,56 +32,56 @@ void Crafter::Packages::CubeWithCamera::setup() {
                              Shaders::PhongGL::Normal{})
             .setIndexBuffer(std::move(indices), 0, compressed.second);
 
-    camera.setPerspectiveProjection(35.0_degf, Vector2{windowSize()}.aspectRatio(), 0.01f, 100.0f);
-    camera.setRotation(30.0f, 40.0f, 0.0f);
-    camera.setTranslation(0.0f, 0.0f, -10.0f);
-    camera.updateCamera();
-
+    _transformation = Matrix4::rotationX(30.0_degf)*Matrix4::rotationY(40.0_degf);
+    _projection =
+            Matrix4::perspectiveProjection(
+                    35.0_degf, Vector2{windowSize()}.aspectRatio(), 0.01f, 100.0f)*
+            Matrix4::translation(Vector3::zAxis(-10.0f));
     _color = Color3::fromHsv({35.0_degf, 1.0f, 1.0f});
 }
 
-void Crafter::Packages::CubeWithCamera::drawEvent() {
+void Crafter::Demo::Packages::Cube::drawEvent() {
     GL::defaultFramebuffer.clear(
             GL::FramebufferClear::Color|GL::FramebufferClear::Depth);
 
     _shader.setLightPositions({{1.4f, 1.0f, 0.75f, 0.0f}})
             .setDiffuseColor(_color)
             .setAmbientColor(Color3::fromHsv({_color.hue(), 1.0f, 0.3f}))
-            .setTransformationMatrix(camera.rotation())
-            .setProjectionMatrix(camera.modelView())
+            .setTransformationMatrix(_transformation)
+            .setNormalMatrix(_transformation.normalMatrix())
+            .setProjectionMatrix(_projection)
             .draw(_mesh);
 
     swapBuffers();
 }
 
-void Crafter::Packages::CubeWithCamera::viewportEvent(ViewportEvent &event) {
+void Crafter::Demo::Packages::Cube::viewportEvent(ViewportEvent &event) {
     GL::defaultFramebuffer.setViewport({{}, event.framebufferSize()});
 
-    camera.setPerspectiveProjection(35.0_degf, Vector2{GL::defaultFramebuffer.viewport().size()}.aspectRatio(), 0.01f, 100.0f);
-    camera.updateCamera();
+    _projection = Matrix4::perspectiveProjection(35.0_degf, Vector2{GL::defaultFramebuffer.viewport().size()}.aspectRatio(), 0.01f, 100.0f)*
+                  Matrix4::translation(Vector3::zAxis(-10.0f));
 }
 
-void Crafter::Packages::CubeWithCamera::mousePressEvent(MouseEvent& event) {
+void Crafter::Demo::Packages::Cube::mousePressEvent(MouseEvent& event) {
     if(event.button() != MouseEvent::Button::Left) return;
     event.setAccepted();
 }
 
-void Crafter::Packages::CubeWithCamera::mouseReleaseEvent(MouseEvent& event) {
+void Crafter::Demo::Packages::Cube::mouseReleaseEvent(MouseEvent& event) {
     _color = Color3::fromHsv({_color.hue() + 50.0_degf, 1.0f, 1.0f});
 
     event.setAccepted();
     redraw();
 }
 
-void Crafter::Packages::CubeWithCamera::mouseMoveEvent(MouseMoveEvent& event) {
+void Crafter::Demo::Packages::Cube::mouseMoveEvent(MouseMoveEvent& event) {
     if(!(event.buttons() & MouseMoveEvent::Button::Left)) return;
 
     Vector2 delta = 3.0f*Vector2{event.relativePosition()}/Vector2{windowSize()};
-
-    // rotate camera up, down, left, right
-    camera.addRotationY(delta.x()*100);
-    camera.addRotationX(-(delta.y()*100));
-    camera.updateCamera();
+    _transformation =
+            Matrix4::rotationX(Rad{delta.y()})*
+            _transformation*
+            Matrix4::rotationY(Rad{delta.x()});
 
     event.setAccepted();
     redraw();

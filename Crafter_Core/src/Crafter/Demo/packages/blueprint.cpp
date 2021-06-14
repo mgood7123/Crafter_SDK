@@ -5,13 +5,13 @@
 #include <Magnum/GL/DefaultFramebuffer.h>
 #include <Magnum/GL/Buffer.h>
 
-CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Packages::Polygon, Polygon)
+CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Demo::Packages::Polygon, Polygon)
 
-void Crafter::Packages::Polygon::setup() {
+void Crafter::Demo::Packages::Polygon::setup() {
     blueprint.setPolygonResolution(8);
 }
 
-void Crafter::Packages::Polygon::drawEvent() {
+void Crafter::Demo::Packages::Polygon::drawEvent() {
     GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
     blueprint.draw();
     swapBuffers();

@@ -2,8 +2,8 @@
 // Created by Matthew Good on 6/6/21.
 //
 
-#ifndef CRAFTER_CRAFTERPACKAGE_H
-#define CRAFTER_CRAFTERPACKAGE_H
+#ifndef CRAFTER_PACKAGE_H
+#define CRAFTER_PACKAGE_H
 
 #include <Corrade/Corrade.h>
 
@@ -309,4 +309,4 @@ jniPackage##_onEglTearDown(JNIEnv *jenv, jobject type, jlong instance) { \
 #endif
 #endif
 
-#endif //CRAFTER_CRAFTERPACKAGE_H
+#endif //CRAFTER_PACKAGE_H
