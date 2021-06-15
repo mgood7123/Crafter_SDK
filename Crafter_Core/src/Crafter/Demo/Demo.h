@@ -18,7 +18,7 @@
 #include "packages/triangle.h"
 #include "packages/cube.h"
 #include "packages/egl_cube.h"
-//#include "packages/blueprint.h"
+#include "packages/blueprintDemo.h"
 #include "packages/cubeWithCamera.h"
 
 #endif //CRAFTER_DEMO_H
