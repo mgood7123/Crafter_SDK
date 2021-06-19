@@ -37,7 +37,7 @@ macro(Crafter_SDK_CMAKE_HELPER_import_library SDK)
 endmacro()
 
 macro(import_test_builder)
-    if(NOT COMMAND testBuilder_build)
+    if(NOT COMMAND testBuilder_set_current_working_directory_to_default_binary_directory)
         add_subdirectory(${Crafter_SDK_ROOT}/testBuilder ${CMAKE_CURRENT_BINARY_DIR}/testBuilder)
         testBuilder_set_current_working_directory_to_default_binary_directory()
     endif()
@@ -94,6 +94,8 @@ macro(import_project__Crafter_Magnum)
         add_subdirectory(${Crafter_SDK_ROOT}/Crafter_Magnum/corrade EXCLUDE_FROM_ALL ${CMAKE_CURRENT_BINARY_DIR}/corrade)
 
         # Add Magnum as a subproject
+        set(WITH_MAGNUMFONT ON CACHE BOOL "" FORCE)
+        set(WITH_TEXT ON CACHE BOOL "" FORCE)
         set(WITH_GL ON CACHE BOOL "" FORCE)
         set(TARGET_GL ON CACHE BOOL "" FORCE)
         if(CORRADE_TARGET_ANDROID)
@@ -107,6 +109,23 @@ macro(import_project__Crafter_Magnum)
 
         add_subdirectory(${Crafter_SDK_ROOT}/Crafter_Magnum/magnum EXCLUDE_FROM_ALL ${CMAKE_CURRENT_BINARY_DIR}/magnum)
 
+        # add UI extra
+
+        set(WITH_UI ON CACHE BOOL "" FORCE)
+        add_subdirectory(${Crafter_SDK_ROOT}/Crafter_Magnum/magnum-extras EXCLUDE_FROM_ALL ${CMAKE_CURRENT_BINARY_DIR}/magnum-extras)
+
+        # add font plugins
+
+        add_subdirectory(${Crafter_SDK_ROOT}/Crafter_Magnum/freetype-cmake ${CMAKE_CURRENT_BINARY_DIR}/freetype-cmake)
+        freetype_cmake_include_freetype(${Crafter_SDK_ROOT}/Crafter_Magnum/freetype-cmake)
+
+        set(WITH_STBTRUETYPEFONT ON CACHE BOOL "" FORCE)
+        set(WITH_FREETYPEFONT ON CACHE BOOL "" FORCE)
+        add_subdirectory(${Crafter_SDK_ROOT}/Crafter_Magnum/magnum-plugins EXCLUDE_FROM_ALL ${CMAKE_CURRENT_BINARY_DIR}/magnum-plugins)
+
+        find_package(MagnumPlugins REQUIRED FreeTypeFont)
+        find_package(MagnumPlugins REQUIRED StbTrueTypeFont)
+
         if(CORRADE_TARGET_ANDROID)
             find_package(Magnum REQUIRED GL WindowlessAndroidApplication)
         else()
@@ -116,6 +135,12 @@ macro(import_project__Crafter_Magnum)
         import_test_builder()
 
         testBuilder_add_source(Crafter_Magnum ${Crafter_SDK_ROOT}/Crafter_Magnum/empty.cpp)
+        testBuilder_add_dependency(Crafter_Magnum FREETYPE_CMAKE_LIB_FREETYPE)
+        testBuilder_add_dependency(Crafter_Magnum Magnum::MagnumFont)
+        testBuilder_add_dependency(Crafter_Magnum MagnumPlugins::FreeTypeFont)
+        testBuilder_add_dependency(Crafter_Magnum MagnumPlugins::StbTrueTypeFont)
+        testBuilder_add_library(Crafter_Magnum MagnumExtras::Ui)
+        testBuilder_add_library(Crafter_Magnum Magnum::Text)
         testBuilder_add_library(Crafter_Magnum Magnum::DebugTools)
         testBuilder_add_library(Crafter_Magnum Magnum::GL)
         testBuilder_add_library(Crafter_Magnum Magnum::Magnum)

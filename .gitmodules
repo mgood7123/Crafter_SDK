@@ -7,3 +7,12 @@
 [submodule "Crafter_Magnum/toolchains"]
 	path = Crafter_Magnum/toolchains
 	url = https://github.com/mosra/toolchains
+[submodule "Crafter_Magnum/freetype-cmake"]
+	path = Crafter_Magnum/freetype-cmake
+	url = https://github.com/mgood7123/freetype-cmake
+[submodule "Crafter_Magnum/magnum-extras"]
+	path = Crafter_Magnum/magnum-extras
+	url = https://github.com/mosra/magnum-extras
+[submodule "Crafter_Magnum/magnum-plugins"]
+	path = Crafter_Magnum/magnum-plugins
+	url = https://github.com/mosra/magnum-plugins
