@@ -4,6 +4,58 @@
 
 #include "Translation.h"
 
+void Crafter::Translation::saveTranslationX() {
+    _translation_stackX.push({t_x, _translationX});
+}
+
+void Crafter::Translation::saveTranslationY() {
+    _translation_stackY.push({t_y, _translationY});
+}
+
+void Crafter::Translation::saveTranslationZ() {
+    _translation_stackZ.push({t_z, _translationZ});
+}
+
+void Crafter::Translation::saveTranslation() {
+    saveTranslationX();
+    saveTranslationY();
+    saveTranslationZ();
+}
+
+void Crafter::Translation::restoreTranslationX() {
+    if (_translation_stackX.empty()) return;
+    auto val = _translation_stackX.top();
+    t_x = val.first;
+    _translationX = val.second;
+    _translation_stackX.pop();
+}
+
+void Crafter::Translation::restoreTranslationY() {
+    if (_translation_stackY.empty()) return;
+    auto val = _translation_stackY.top();
+    t_y = val.first;
+    _translationY = val.second;
+    _translation_stackY.pop();
+}
+
+void Crafter::Translation::restoreTranslationZ() {
+    if (_translation_stackZ.empty()) return;
+    auto val = _translation_stackZ.top();
+    t_z = val.first;
+    _translationZ = val.second;
+    _translation_stackZ.pop();
+}
+
+void Crafter::Translation::restoreTranslation() {
+    restoreTranslationX();
+    restoreTranslationY();
+    restoreTranslationZ();
+}
+
+Magnum::Vector3 Crafter::Translation::translationVector3() const {
+    return {t_x, t_y, t_z};
+}
+
 void Crafter::Translation::setTranslationX_(const float &x) {
     _translationX = Magnum::Matrix4::translation(Magnum::Vector3::xAxis(x));
 }
@@ -41,7 +93,7 @@ void Crafter::Translation::divTranslationX(const float &x) {
     setTranslationX_(t_x);
 }
 
-Magnum::Matrix4 Crafter::Translation::translationX() {
+Magnum::Matrix4 Crafter::Translation::translationX() const {
     return _translationX;
 }
 
@@ -70,7 +122,7 @@ void Crafter::Translation::divTranslationY(const float &y) {
     setTranslationY_(t_y);
 }
 
-Magnum::Matrix4 Crafter::Translation::translationY() {
+Magnum::Matrix4 Crafter::Translation::translationY() const {
     return _translationY;
 }
 
@@ -99,7 +151,7 @@ void Crafter::Translation::divTranslationZ(const float &z) {
     setTranslationZ_(t_z);
 }
 
-Magnum::Matrix4 Crafter::Translation::translationZ() {
+Magnum::Matrix4 Crafter::Translation::translationZ() const {
     return _translationZ;
 }
 
@@ -133,14 +185,11 @@ void Crafter::Translation::divTranslation(const float &x, const float &y, const 
     divTranslationZ(z);
 }
 
-Magnum::Matrix4 Crafter::Translation::translation() {
+Magnum::Matrix4 Crafter::Translation::translation() const {
     return translationX() * translationY() * translationZ();
 }
 
 Magnum::Matrix4
 Crafter::Translation::translationDistance(const Magnum::Matrix4 &A, const Magnum::Matrix4 &B) {
-    Magnum::Vector3 a = A.translation();
-    Magnum::Vector3 b = B.translation();
-    Magnum::Vector3 c = b - a;
-    return Magnum::Matrix4::translation(c);
+    return Magnum::Matrix4::translation(B.translation() - A.translation());
 }

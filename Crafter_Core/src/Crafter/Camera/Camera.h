@@ -5,30 +5,14 @@
 #ifndef CRAFTER_CAMERA_H
 #define CRAFTER_CAMERA_H
 
-#include <Magnum/Magnum.h> // Magnum:: typedefs
-#include <Magnum/Math/Matrix4.h> // Magnum::Matrix4
-#include "Rotation.h"
-#include "Translation.h"
+#include <Crafter/CoordinateSystems/ClipSpace.h>
+#include <Crafter/CoordinateSystems/ViewSpace.h>
 
 namespace Crafter {
-    class Camera: public Rotation, public Translation {
-    private:
-        Magnum::Matrix4 _modelView, _perspectiveProjection;
-
-        bool hasPerspectiveProjection = false;
-
+    class Camera: public ClipSpace, public ViewSpace {
     public:
-
+        Magnum::Matrix4 _modelView;
         const Magnum::Matrix4 &modelView() const;
-
-        const Magnum::Matrix4 &perspectiveProjection() const;
-
-        void setPerspectiveProjection(const Magnum::Vector2 & size, const float near, const float far);
-
-        void setPerspectiveProjection(Magnum::Rad fov, float aspectRatio, float near, float far);
-
-        void setPerspectiveProjection(const Magnum::Vector2 & bottomLeft, const Magnum::Vector2 & topRight, float near, float far);
-
         void updateCamera();
     };
 }

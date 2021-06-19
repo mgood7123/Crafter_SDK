@@ -7,10 +7,13 @@
 
 #include <Magnum/Magnum.h> // Magnum:: typedefs
 #include <Magnum/Math/Matrix4.h> // Magnum::Matrix4
+#include <stack>
 
 namespace Crafter {
     class Rotation {
     protected:
+        std::stack<std::pair<float, Magnum::Matrix4>>
+        _rotation_stackX, _rotation_stackY, _rotation_stackZ;
         Magnum::Matrix4 _rotationX, _rotationY, _rotationZ;
 
         void setRotationX_(const float &x);
@@ -19,10 +22,25 @@ namespace Crafter {
 
         void setRotationZ_(const float &z);
 
-        float r_x = 0;
-        float r_y = 0;
-        float r_z = 0;
     public:
+        // not to be edited directly
+        float r_x = 0;
+        // not to be edited directly
+        float r_y = 0;
+        // not to be edited directly
+        float r_z = 0;
+
+        virtual void saveRotationX();
+        virtual void saveRotationY();
+        virtual void saveRotationZ();
+        virtual void saveRotation();
+
+        virtual void restoreRotationX();
+        virtual void restoreRotationY();
+        virtual void restoreRotationZ();
+        virtual void restoreRotation();
+
+        virtual Magnum::Vector3 rotationVector3() const;
 
         virtual void setRotationX(const float &degrees);
 
@@ -34,7 +52,7 @@ namespace Crafter {
 
         virtual void divRotationX(const float &degrees);
 
-        virtual Magnum::Matrix4 rotationX();
+        virtual Magnum::Matrix4 rotationX() const;
 
         virtual void setRotationY(const float &degrees);
 
@@ -46,7 +64,7 @@ namespace Crafter {
 
         virtual void divRotationY(const float &degrees);
 
-        virtual Magnum::Matrix4 rotationY();
+        virtual Magnum::Matrix4 rotationY() const;
 
         virtual void setRotationZ(const float &degrees);
 
@@ -58,7 +76,7 @@ namespace Crafter {
 
         virtual void divRotationZ(const float &degrees);
 
-        virtual Magnum::Matrix4 rotationZ();
+        virtual Magnum::Matrix4 rotationZ() const;
 
         virtual void setRotation(const float &x, const float &y, const float &z);
 
@@ -70,7 +88,7 @@ namespace Crafter {
 
         virtual void divRotation(const float &x, const float &y, const float &z);
 
-        virtual Magnum::Matrix4 rotation();
+        virtual Magnum::Matrix4 rotation() const;
     };
 }
 

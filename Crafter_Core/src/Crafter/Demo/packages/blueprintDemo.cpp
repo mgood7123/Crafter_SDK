@@ -13,9 +13,8 @@ CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(Crafter::Demo::Packages::BlueprintDemo,
 
 void Crafter::Demo::Packages::BlueprintDemo::setup() {
     blueprint.setup();
-    blueprint.attachToCamera(camera);
-    blueprint.updateAspectRatio(Vector2{windowSize()}.aspectRatio());
-
+//    blueprint.attachToCamera(camera);
+    blueprint.updateAspectRatio(windowSize(), Vector2{windowSize()}.aspectRatio());
 }
 
 void Crafter::Demo::Packages::BlueprintDemo::drawEvent() {
@@ -25,12 +24,15 @@ void Crafter::Demo::Packages::BlueprintDemo::drawEvent() {
     blueprint.draw();
 
     swapBuffers();
+    redraw();
 }
 
 void Crafter::Demo::Packages::BlueprintDemo::viewportEvent(ViewportEvent &event) {
     GL::defaultFramebuffer.setViewport({{}, event.framebufferSize()});
 
-    blueprint.updateAspectRatio(Vector2{GL::defaultFramebuffer.viewport().size()}.aspectRatio());
+    auto size = GL::defaultFramebuffer.viewport().size();
+
+    blueprint.updateAspectRatio(size, Vector2{size}.aspectRatio());
 }
 
 void Crafter::Demo::Packages::BlueprintDemo::mousePressEvent(MouseEvent& event) {

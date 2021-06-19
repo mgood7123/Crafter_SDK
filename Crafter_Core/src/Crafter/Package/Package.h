@@ -44,6 +44,19 @@ namespace Crafter {
 #endif
         Arguments applicationArguments;
 
+        /**
+         * implementors should deal with the possibility of this
+         * being called before any view port events
+         * <br><br>
+         * this can be detected by the following code:
+         * <pre class="prettyprint">
+         * if (!windowSize().isZero()) {
+         * <br>
+         * // code that depends on valid values
+         * <br>
+         * }
+         * </pre>
+         */
         virtual void setup();
     };
 }

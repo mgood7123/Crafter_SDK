@@ -5,28 +5,39 @@
 #ifndef CRAFTER_WORLDENGINE_H
 #define CRAFTER_WORLDENGINE_H
 
-#include <Crafter/Camera/Camera.h>
-#include <Magnum/GL/Mesh.h>
-#include <Magnum/Shaders/FlatGL.h>
-#include <Magnum/Math/Color.h>
-#include "MeshGenerator.h"
+#include "WorldEngineBase.h"
+#include <Crafter/CameraControls/FreeformCamera.h>
+#include <Magnum/DebugTools/FrameProfiler.h>
 
 namespace Crafter {
     namespace WorldEngine {
-        class WorldEngine {
-            Magnum::GL::Mesh _mesh;
-            Magnum::Shaders::FlatGL3D _shader{Magnum::Shaders::FlatGL3D::Flag::VertexColor};
-            Magnum::Color3 _color;
-            Crafter::Camera *camera = nullptr;
+        using namespace Magnum;
+        using namespace SceneGraph;
+        using namespace Magnum::Math::Literals;
+
+        typedef WorldEngineBase::Object3D Object3D;
+        typedef WorldEngineBase::Scene3D Scene3D;
+
+        typedef FreeformCamera<Scene3D, Object3D> FreeformCamera3D;
+
+        class WorldEngine : public WorldEngineBase {
+            Magnum::DebugTools::FrameProfilerGL profiler;
+
+            FreeformCamera3D * _freeformCamera;
+
+            WorldEngineBase::Scene3D _scene;
+            Object3D* _cameraObject;
+            Camera3D* _camera;
+            DrawableGroup3D _drawables;
 
         public:
             void setup();
 
-            void attachToCamera(Crafter::Camera &camera);
+            void attachToCamera(Camera3D *camera);
 
-            void updateAspectRatio(float aspectRatio);
+            void updateAspectRatio(const Vector2i & viewport, float aspectRatio);
 
-            void rotateRelative(Magnum::Vector2 relative);
+            void rotateRelative(Vector2 relative);
 
             void draw();
         };

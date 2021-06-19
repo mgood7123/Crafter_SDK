@@ -4,6 +4,58 @@
 
 #include "Rotation.h"
 
+void Crafter::Rotation::saveRotationX() {
+    _rotation_stackX.push({r_x, _rotationX});
+}
+
+void Crafter::Rotation::saveRotationY() {
+    _rotation_stackY.push({r_y, _rotationY});
+}
+
+void Crafter::Rotation::saveRotationZ() {
+    _rotation_stackZ.push({r_z, _rotationZ});
+}
+
+void Crafter::Rotation::saveRotation() {
+    saveRotationX();
+    saveRotationY();
+    saveRotationZ();
+}
+
+void Crafter::Rotation::restoreRotationX() {
+    if (_rotation_stackX.empty()) return;
+    auto val = _rotation_stackX.top();
+    r_x = val.first;
+    _rotationX = val.second;
+    _rotation_stackX.pop();
+}
+
+void Crafter::Rotation::restoreRotationY() {
+    if (_rotation_stackY.empty()) return;
+    auto val = _rotation_stackY.top();
+    r_y = val.first;
+    _rotationY = val.second;
+    _rotation_stackY.pop();
+}
+
+void Crafter::Rotation::restoreRotationZ() {
+    if (_rotation_stackZ.empty()) return;
+    auto val = _rotation_stackZ.top();
+    r_z = val.first;
+    _rotationZ = val.second;
+    _rotation_stackZ.pop();
+}
+
+void Crafter::Rotation::restoreRotation() {
+    restoreRotationX();
+    restoreRotationY();
+    restoreRotationZ();
+}
+
+Magnum::Vector3 Crafter::Rotation::rotationVector3() const {
+    return {r_x, r_y, r_z};
+}
+
 void Crafter::Rotation::setRotationX_(const float &degrees) {
     _rotationX = Magnum::Matrix4::rotationX(Magnum::Deg(degrees));
 }
@@ -41,7 +93,7 @@ void Crafter::Rotation::divRotationX(const float &degrees) {
     setRotationX_(r_x);
 }
 
-Magnum::Matrix4 Crafter::Rotation::rotationX() {
+Magnum::Matrix4 Crafter::Rotation::rotationX() const {
     return _rotationX;
 }
 
@@ -70,7 +122,7 @@ void Crafter::Rotation::divRotationY(const float &degrees) {
     setRotationY_(r_y);
 }
 
-Magnum::Matrix4 Crafter::Rotation::rotationY() {
+Magnum::Matrix4 Crafter::Rotation::rotationY() const {
     return _rotationY;
 }
 
@@ -99,7 +151,7 @@ void Crafter::Rotation::divRotationZ(const float &degrees) {
     setRotationZ_(r_z);
 }
 
-Magnum::Matrix4 Crafter::Rotation::rotationZ() {
+Magnum::Matrix4 Crafter::Rotation::rotationZ() const {
     return _rotationZ;
 }
 
@@ -133,6 +185,6 @@ void Crafter::Rotation::divRotation(const float &x, const float &y, const float 
     divRotationZ(z);
 }
 
-Magnum::Matrix4 Crafter::Rotation::rotation() {
+Magnum::Matrix4 Crafter::Rotation::rotation() const {
     return rotationX() * rotationY() * rotationZ();
 }

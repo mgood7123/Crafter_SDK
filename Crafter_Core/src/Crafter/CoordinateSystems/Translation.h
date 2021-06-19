@@ -7,10 +7,13 @@
 
 #include <Magnum/Magnum.h> // Magnum:: typedefs
 #include <Magnum/Math/Matrix4.h> // Magnum::Matrix4
+#include <stack>
 
 namespace Crafter {
     class Translation {
     protected:
+        std::stack<std::pair<float, Magnum::Matrix4>>
+        _translation_stackX, _translation_stackY, _translation_stackZ;
         Magnum::Matrix4 _translationX, _translationY, _translationZ;
 
         void setTranslationX_(const float &x);
@@ -19,11 +22,27 @@ namespace Crafter {
 
         void setTranslationZ_(const float &z);
 
-        float t_x = 0;
-        float t_y = 0;
-        float t_z = 0;
 
     public:
+
+        // not to be edited directly
+        float t_x = 0;
+        // not to be edited directly
+        float t_y = 0;
+        // not to be edited directly
+        float t_z = 0;
+
+        virtual void saveTranslationX();
+        virtual void saveTranslationY();
+        virtual void saveTranslationZ();
+        virtual void saveTranslation();
+
+        virtual void restoreTranslationX();
+        virtual void restoreTranslationY();
+        virtual void restoreTranslationZ();
+        virtual void restoreTranslation();
+
+        virtual Magnum::Vector3 translationVector3() const;
 
         virtual void setTranslationX(const float &x);
 
@@ -35,7 +54,7 @@ namespace Crafter {
 
         virtual void divTranslationX(const float &x);
 
-        virtual Magnum::Matrix4 translationX();
+        virtual Magnum::Matrix4 translationX() const;
 
         virtual void setTranslationY(const float &y);
 
@@ -47,7 +66,7 @@ namespace Crafter {
 
         virtual void divTranslationY(const float &y);
 
-        virtual Magnum::Matrix4 translationY();
+        virtual Magnum::Matrix4 translationY() const;
 
         virtual void setTranslationZ(const float &z);
 
@@ -59,7 +78,7 @@ namespace Crafter {
 
         virtual void divTranslationZ(const float &z);
 
-        virtual Magnum::Matrix4 translationZ();
+        virtual Magnum::Matrix4 translationZ() const;
 
         virtual void setTranslation(const float &x, const float &y, const float &z);
 
@@ -71,7 +90,7 @@ namespace Crafter {
 
         virtual void divTranslation(const float &x, const float &y, const float &z);
 
-        virtual Magnum::Matrix4 translation();
+        virtual Magnum::Matrix4 translation() const;
 
         static Magnum::Matrix4 translationDistance(const Magnum::Matrix4 & A, const Magnum::Matrix4 & B);
     };

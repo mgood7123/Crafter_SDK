@@ -6,7 +6,6 @@
 #define CRAFTER_BLUEPRINT_H
 
 #include <Crafter/WorldEngine/WorldEngine.h>
-#include <Crafter/Camera/Camera.h>
 
 namespace Crafter {
     class Blueprint {
@@ -14,9 +13,9 @@ namespace Crafter {
     public:
         void setup();
 
-        void attachToCamera(Crafter::Camera & camera);
+        void attachToCamera(Magnum::SceneGraph::Camera3D * camera);
 
-        void updateAspectRatio(float aspectRatio);
+        void updateAspectRatio(const Magnum::Vector2i & viewport, float aspectRatio);
 
         void rotateRelative(Magnum::Vector2 relative);
 
