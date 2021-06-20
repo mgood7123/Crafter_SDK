@@ -134,33 +134,31 @@ macro(import_project__Crafter_Magnum)
 
         import_test_builder()
 
-        testBuilder_add_source(Crafter_Magnum ${Crafter_SDK_ROOT}/Crafter_Magnum/empty.cpp)
-        testBuilder_add_dependency(Crafter_Magnum FREETYPE_CMAKE_LIB_FREETYPE)
-        testBuilder_add_dependency(Crafter_Magnum Magnum::MagnumFont)
-        testBuilder_add_dependency(Crafter_Magnum MagnumPlugins::FreeTypeFont)
-        testBuilder_add_dependency(Crafter_Magnum MagnumPlugins::StbTrueTypeFont)
-        testBuilder_add_library(Crafter_Magnum MagnumExtras::Ui)
-        testBuilder_add_library(Crafter_Magnum Magnum::Text)
-        testBuilder_add_library(Crafter_Magnum Magnum::DebugTools)
-        testBuilder_add_library(Crafter_Magnum Magnum::GL)
-        testBuilder_add_library(Crafter_Magnum Magnum::Magnum)
-        testBuilder_add_library(Crafter_Magnum Magnum::MeshTools)
-        testBuilder_add_library(Crafter_Magnum Magnum::Primitives)
-        testBuilder_add_library(Crafter_Magnum Magnum::SceneGraph)
-        testBuilder_add_library(Crafter_Magnum Magnum::Shaders)
-        testBuilder_add_library(Crafter_Magnum Magnum::TextureTools)
-        testBuilder_add_library(Crafter_Magnum Magnum::Trade)
+        add_library(Crafter_Magnum SHARED ${Crafter_SDK_ROOT}/Crafter_Magnum/empty.cpp)
+        add_dependencies(FreeTypeFont FREETYPE_CMAKE_LIB_FREETYPE)
+        add_dependencies(StbTrueTypeFont FreeTypeFont)
+        add_dependencies(MagnumFont StbTrueTypeFont)
+        add_dependencies(Crafter_Magnum MagnumFont)
+        add_dependencies(MagnumUi MagnumFont)
         if(NOT CORRADE_TARGET_ANDROID)
-            testBuilder_add_library(Crafter_Magnum Magnum::Application)
+            set(PLATFORM_LIBS Magnum::Application)
         else()
-            testBuilder_add_library(Crafter_Magnum Magnum::EglContext)
-            testBuilder_add_library(Crafter_Magnum Magnum::WindowlessAndroidApplication)
-            testBuilder_add_library(Crafter_Magnum android)
-            testBuilder_add_library(Crafter_Magnum log)
-            testBuilder_add_library(Crafter_Magnum EGL)
-            testBuilder_add_library(Crafter_Magnum GLESv3)
+            set(PLATFORM_LIBS Magnum::EglContext Magnum::WindowlessAndroidApplication android log EGL GLESv3)
         endif()
-        testBuilder_build_static_library(Crafter_Magnum)
+        target_link_libraries(Crafter_Magnum
+                MagnumExtras::Ui
+                Magnum::Text
+                Magnum::DebugTools
+                Magnum::GL
+                Magnum::Magnum
+                Magnum::MeshTools
+                Magnum::Primitives
+                Magnum::SceneGraph
+                Magnum::Shaders
+                Magnum::TextureTools
+                Magnum::Trade
+                ${PLATFORM_LIBS}
+        )
         set(CRAFTER_IMPORTED_MAGNUM 1)
     endif()
 endmacro()
@@ -173,23 +171,22 @@ macro(import_project__Crafter_Core)
         set(CRAFTER_SRC ${Crafter_SDK_ROOT}/Crafter_Core/src)
         include_directories(${CRAFTER_SRC})
         add_subdirectory(${CRAFTER_SRC}/Crafter/WorldEngine/WINAPI_KERNEL ${CMAKE_CURRENT_BINARY_DIR}/WINAPI_KERNEL)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/Blueprint/Blueprint.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/Camera/Camera.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/CoordinateSystems/Translation.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/CoordinateSystems/Scale.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/CoordinateSystems/Rotation.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/CoordinateSystems/WorldSpace.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/CoordinateSystems/ViewSpace.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/CoordinateSystems/ClipSpace.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/Demo/Demo.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/Package/Package.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/WorldEngine/MeshGenerator.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/WorldEngine/WorldEngine.cpp)
-        testBuilder_add_source(Crafter_Core ${CRAFTER_SRC}/Crafter/WorldEdit/WorldEdit.cpp)
-        testBuilder_add_library(Crafter_Core Crafter_Magnum)
-        testBuilder_add_library(Crafter_Core WINAPI::KERNEL)
-#        testBuilder_add_library(Crafter_Core PolygonDeformer)
-        testBuilder_build_static_library(Crafter_Core)
+        add_library(Crafter_Core SHARED
+                ${CRAFTER_SRC}/Crafter/Blueprint/Blueprint.cpp
+                ${CRAFTER_SRC}/Crafter/Camera/Camera.cpp
+                ${CRAFTER_SRC}/Crafter/CoordinateSystems/Translation.cpp
+                ${CRAFTER_SRC}/Crafter/CoordinateSystems/Scale.cpp
+                ${CRAFTER_SRC}/Crafter/CoordinateSystems/Rotation.cpp
+                ${CRAFTER_SRC}/Crafter/CoordinateSystems/WorldSpace.cpp
+                ${CRAFTER_SRC}/Crafter/CoordinateSystems/ViewSpace.cpp
+                ${CRAFTER_SRC}/Crafter/CoordinateSystems/ClipSpace.cpp
+                ${CRAFTER_SRC}/Crafter/Demo/Demo.cpp
+                ${CRAFTER_SRC}/Crafter/Package/Package.cpp
+                ${CRAFTER_SRC}/Crafter/WorldEngine/MeshGenerator.cpp
+                ${CRAFTER_SRC}/Crafter/WorldEngine/WorldEngine.cpp
+                ${CRAFTER_SRC}/Crafter/WorldEdit/WorldEdit.cpp
+        )
+        target_link_libraries(Crafter_Core Crafter_Magnum WINAPI::KERNEL)
         set(CRAFTER_IMPORTED_CORE 1)
     endif()
 endmacro()
