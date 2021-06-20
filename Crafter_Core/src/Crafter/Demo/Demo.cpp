@@ -7,6 +7,7 @@
 using namespace Magnum;
 using namespace Math::Literals;
 
+#include "packages/UI.cpp"
 #include "packages/triangle.cpp"
 #include "packages/cube.cpp"
 #include "packages/egl_cube.cpp"

@@ -15,6 +15,7 @@
 #define CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_CPP(class_, className) class_::className(const Arguments &arguments) : Crafter::Package{arguments} {}
 #endif
 
+#include "packages/UI.h"
 #include "packages/triangle.h"
 #include "packages/cube.h"
 #include "packages/egl_cube.h"
