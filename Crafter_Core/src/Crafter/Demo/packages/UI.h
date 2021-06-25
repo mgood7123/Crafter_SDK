@@ -12,13 +12,11 @@ namespace Crafter {
             class UI : public Crafter::Package {
             public:
                 CRAFTER_PACKAGE_CONSTRUCTOR_WRAPPERS_HPP(UI);
-                Magnum::Ui::UserInterface ui{
-                    Magnum::Vector2 {2,2},
-                    Magnum::Vector2i{2,2},
-                    Magnum::Vector2i{2,2}
-                };
 
                 void setup() override;
+
+                void viewportEvent(ViewportEvent &event) override;
+
                 void drawEvent() override;
             };
         }

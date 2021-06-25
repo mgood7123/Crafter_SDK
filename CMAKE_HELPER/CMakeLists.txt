@@ -122,6 +122,8 @@ macro(import_project__Crafter_Magnum)
         set(WITH_STBTRUETYPEFONT ON CACHE BOOL "" FORCE)
         set(WITH_FREETYPEFONT ON CACHE BOOL "" FORCE)
         add_subdirectory(${Crafter_SDK_ROOT}/Crafter_Magnum/magnum-plugins EXCLUDE_FROM_ALL ${CMAKE_CURRENT_BINARY_DIR}/magnum-plugins)
+        include_directories(${CMAKE_CURRENT_BINARY_DIR}/magnum-plugins/src)
+        include_directories(${Crafter_SDK_ROOT}/Crafter_Magnum/magnum-plugins/src)
 
         find_package(MagnumPlugins REQUIRED FreeTypeFont)
         find_package(MagnumPlugins REQUIRED StbTrueTypeFont)
@@ -146,6 +148,7 @@ macro(import_project__Crafter_Magnum)
             set(PLATFORM_LIBS Magnum::EglContext Magnum::WindowlessAndroidApplication android log EGL GLESv3)
         endif()
         target_link_libraries(Crafter_Magnum
+                FREETYPE_CMAKE_LIB_FREETYPE
                 MagnumExtras::Ui
                 Magnum::Text
                 Magnum::DebugTools
@@ -186,7 +189,10 @@ macro(import_project__Crafter_Core)
                 ${CRAFTER_SRC}/Crafter/WorldEngine/WorldEngine.cpp
                 ${CRAFTER_SRC}/Crafter/WorldEdit/WorldEdit.cpp
         )
-        target_link_libraries(Crafter_Core Crafter_Magnum WINAPI::KERNEL)
+        target_link_libraries(Crafter_Core
+                Crafter_Magnum
+                WINAPI::KERNEL
+        )
         set(CRAFTER_IMPORTED_CORE 1)
     endif()
 endmacro()
